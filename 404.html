@@ -3,8 +3,11 @@
   <head>
     <title>My App</title>
     <script>
-      sessionStorage.redirect = location.href;
-      location.reload(); 
+      if (!sessionStorage.redirect)
+      {
+        sessionStorage.redirect = location.href;
+        location.reload(); 
+      }
     </script>
   </head>
 </html>
