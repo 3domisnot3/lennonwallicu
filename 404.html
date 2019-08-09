@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My App</title>
-    <script>
-      if (!sessionStorage.redirect)
-      {
-        sessionStorage.redirect = location.href;
-        location.reload(); 
-      }
-    </script>
-  </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  sessionStorage.redirect = location.href;
+</script>
+<meta http-equiv="refresh" content="0;URL='/'"></meta>
+</head>
+<body>
+     
+</body>
 </html>
