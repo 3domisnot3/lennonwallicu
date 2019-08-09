@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no">
+
+    <meta name="image" content="https://lennonwall.icu/img/social.png?v=001">
+
+    <!-- Schema.org for Google -->
+    <meta itemprop="image" content="https://lennonwall.icu/img/social.png?v=001">
+
+    <!-- Twitter -->
+    <meta name="twitter:site" content="@setinblock">
+    <meta name="twitter:image:src" content="https://lennonwall.icu/img/social.png?v=001">
+
+    <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+    <meta property="og:image" content="https://lennonwall.icu/img/social_fb.png?v=001">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/img/favicon/ms-icon-144x144.png">
+    <meta name="apple-mobile-web-app-title" content="Lennon Wall ICU">
+    <meta name="application-name" content="Lennon Wall ICU">
+    <meta name="msapplication-config" content="/img/favicon/browserconfig.xml?v=009">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fonts -->
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/ipfs-http-client@v30.1.2/dist/index.min.js"></script>
+    
+    <script>
+      // // TESTNET
+      // etherscan = "https://ropsten.etherscan.io";
+    
+      // MAINNET
+      etherscan = "https://api.etherscan.io";
+      
+      const gasPerByte = 68
+
+      function gasCount(string) {
+        var bytes = encodeURI(string).split(/%..|./).length - 1;
+        return bytes * gasPerByte / 2;
+      }
+    </script>
+  </head>
+
+  <body>
+    <noscript>
+      <strong>We're sorry but it doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+
+    <div id="splashScreen" style="position:absolute;width:100px;height:100px;top:50%;left:50%;margin-top:-50px;margin-left:-50px;background-color:white;">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100px" height="100px" viewBox="0 0  200 200" preserveAspectRatio="xMidYMid meet"><rect id="svgEditorBackground" x="0" y="0" width="200" height="200" style="fill: none; stroke: none;"/><rect x="0" y="0" style="fill:#FFDD57;stroke:none;stroke-width:0px;" id="e1_rectangle" width="200" height="200"/><text style="fill:black;font-family:Impact;font-size:50px;" x="65" y="58" id="e2_texte"><tspan x="98.375" style="text-anchor:middle;">Lennon</tspan><tspan x="98.375" dy="1.25em" style="text-anchor:middle;">Wall</tspan><tspan x="98.375" dy="1.25em" style="text-anchor:middle;">ICU</tspan></text></svg>
+    </div>
+
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+
+  <script src="/lib/sha256.js"></script>
+  <script src="/lib/lib-typedarrays-min.js"></script>
+
+</html>
