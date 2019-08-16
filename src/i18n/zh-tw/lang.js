@@ -4,8 +4,8 @@ export default {
     __lennonwallslogan: '表達自由的恒久地',
     __lennonwallslogan2: '保存於以太坊區塊鏈',
     __lennonwallabout: '',
-    __lennonwallversion: 'v0.1',
-    __lennonwallOnGoing: '目前開發: 連儂牆, 容許張貼圖片及訊息進我們的智能合約，配合標籤方便瀏覧',
+    __lennonwallversion: 'v0.3',
+    __lennonwallOnGoing: '目前開發: 連儂牆v0.4 智能合約, 容許分種類、配合標籤瀏覧。增加投票。',
 
     __home: '主頁',
     __new: '新增記錄',
@@ -14,13 +14,20 @@ export default {
     __reader: '閱讀器',
     __homeAbout: '關於',
 
+    __networkSwitch: '切換網絡',
+    __networkCurrentMainnet: '網絡：主網',
+    __networkCurrentRopsten: '網絡：Ropsten',
+
+    __qrcodegen: 'QRCode 生成器',
+    __qrcodeplaceholder: '在這裡輸入網址或訊息',
+
     __aboutHowItworks:'如何運作',
     __aboutNewMessageTitle: '<a href="/new-message" class="router-link-active">新增記錄</a>:',
     __aboutReadTitle: '<a href="/" class="router-link-active">閱讀記錄</a>:',
     __aboutReadMethod1: '在<a href="/" class="router-link-active">閱讀器</a>開啟',
     __aboutReadMethod2: '把交易哈希嵌入網址, 例如: <br><a href="https://lennonwall.icu/tx/0x2d6a7b0f6adeff38423d4c62cd8b6ccb708ddad85da5d3d06756ad4d8a04a6a2">https://lennonwall.icu/tx/0x2d6a7b0f6adeff38423d4c62cd8b6ccb708ddad85da5d3d06756ad4d8a04a6a2</a>',
     __aboutUs: '連儂牆 ICU',
-    __aboutUsText: '<p>連儂牆 ICU - 急切的需要表達自由的恒久地</p><p><a href="https://zh.wikipedia.org/wiki/%E9%80%A3%E5%84%82%E7%89%86_(%E9%A6%99%E6%B8%AF)" target="_blank">連儂牆</a>指的是香港<a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%B0%8D%E9%80%83%E7%8A%AF%E6%A2%9D%E4%BE%8B%E4%BF%AE%E8%A8%82%E8%8D%89%E6%A1%88%E9%81%8B%E5%8B%95">2019年反對逃犯條例</a>期間所產生的民主拼接牆. 它是遍地開花的空間鼓勵市民為香港打氣及表達對政府於《逃犯條例》修訂過程中處事手法的不滿，滿佈色彩繽紛的便利貼(超過一萬張)，上面寫有推廣自由、民主、及普選的訊息. 可惜在設立後首數天，它們被破壞，而在附近的人們被襲擊。看到和平地表達想法和見解的訊息被破壞而以至人們受到襲擊、受傷、拘捕，我們感到很傷感。</p><p>我們的目的是建立以以太坊區塊鏈為基礎的去中心化社區，作為表達自由的恒久地. 於區塊鏈上讀寫訊息是第一個功能去確保所有訊息是永遠地保存，不可刪除或修改。</p><p>用戶經本站介面編寫及經 MetaMask 直接寫進以太坊網絡、在本地經<a href="https://etherscan.io">EtherScan</a>讀取以太坊網絡上的內容。本站不會能截取用戶的私鑰或任何個人資訊，你可以查看本站的源始碼驗証。本站沒有後台、資料庫，所有運作都在前端，使用Vue.js</p><br></br><h2 style="text-align:left;margin-bottom:40px;">開發路線圖</h2><p><ul><li>連儂牆 - 容許張貼圖片及訊息進我們的智能合約方便瀏覧</li></ul></p><br><br><h2 style="text-align:left;margin-bottom:40px;">聯絡我們</h2><p>Contact: \x33\x64\x6f\x6d\x69\x73\x6e\x6f\x74\x33\x40\x70\x72\x6f\x74\x6f\x6e\x6d\x61\x69\x6c\x2e\x63\x6f\x6d</p><p>捐助可支持未來的開發，為了表達自由的恒久地，謝謝。<br>以太坊地址:0x0093d8f97A6662b3FA38420438390DDB6694A804</p>',
+    __aboutUsText: '<p>連儂牆 ICU - 急切的需要表達自由的恒久地</p><p><a href="https://zh.wikipedia.org/wiki/%E9%80%A3%E5%84%82%E7%89%86_(%E9%A6%99%E6%B8%AF)" target="_blank">連儂牆</a>指的是香港<a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%B0%8D%E9%80%83%E7%8A%AF%E6%A2%9D%E4%BE%8B%E4%BF%AE%E8%A8%82%E8%8D%89%E6%A1%88%E9%81%8B%E5%8B%95">2019年反對逃犯條例</a>期間所產生的民主拼接牆. 它是遍地開花的空間鼓勵市民為香港打氣及表達對政府於《逃犯條例》修訂過程中處事手法的不滿，滿佈色彩繽紛的便利貼(超過一萬張)，上面寫有推廣自由、民主、及普選的訊息. 可惜在設立後首數天，它們被破壞，而在附近的人們被襲擊。看到和平地表達想法和見解的訊息被破壞而以至人們受到襲擊、受傷、拘捕，我們感到很傷感。</p><p>我們的目的是建立以以太坊區塊鏈為基礎的去中心化社區，作為表達自由的恒久地. 於區塊鏈上讀寫訊息是第一個功能去確保所有訊息是永遠地保存，不可刪除或修改。</p><p>用戶經本站介面編寫及經 MetaMask 直接寫進以太坊網絡、在本地經<a href="https://etherscan.io">EtherScan</a>讀取以太坊網絡上的內容。本站不會能截取用戶的私鑰或任何個人資訊，你可以查看本站的源始碼驗証。本站沒有後台、資料庫，所有運作都在前端，使用Vue.js</p><br></br><h2 style="text-align:left;margin-bottom:40px;">開發路線圖</h2><p><ul><li>連儂牆</li></ul></p><br><br><h2 style="text-align:left;margin-bottom:40px;">聯絡我們</h2><p>Contact: \x33\x64\x6f\x6d\x69\x73\x6e\x6f\x74\x33\x40\x70\x72\x6f\x74\x6f\x6e\x6d\x61\x69\x6c\x2e\x63\x6f\x6d</p><p>捐助可支持未來的開發，為了表達自由的恒久地，謝謝。<br>以太坊地址:0x0093d8f97A6662b3FA38420438390DDB6694A804</p>',
     __ethAddress: '0x0093d8f97A6662b3FA38420438390DDB6694A804',
 
     __readsearchplaceholder : '以太坊交易哈希',
@@ -33,8 +40,10 @@ export default {
     __readhashaddress : '以太坊交易哈希:',
     __readEnterTxAlert: '輸入以太坊交易哈希',
     __readLink: 'https://lennonwall.icu/tx/{txHashVal}',
+    __readRopstenLink: 'https://lennonwall.icu/ropsten/tx/{txHashVal}',
 
     __newheadline : '新增一項永久記錄於以太坊區塊鏈上。一經提交及確認將不能修改或刪除',
+    __newheadline2: '非 Mainnet 的網絡可能會被重設。在上面的訊息不保證會持續存在。',
     __newGuidelineButton: '如何運作',
     __newheadDisclaimer: '用戶經本站介面編寫及經 MetaMask 直接寫進至以太坊網絡。本站不會能截取用戶的私鑰或任何個人資訊，你可以查看本站的源始碼驗証。',
     __newheadProcedure: '<b>訊息一經提交及確認將不能修改或刪除。</b>為了保障用戶私隱，訊息會傳送至一個隨機的地址，但注意訊息是公開地可查閱如果地址/交易哈希被得知。我們代準備的交易只包括交易費用，愈長的訊息費用愈高。<br><br>只要保留交易哈希，就可在各種以太坊區塊鏈介面查看記錄內容',

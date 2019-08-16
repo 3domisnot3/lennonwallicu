@@ -5,6 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons'
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import router from './router'
 import i18n from './i18n'
@@ -18,11 +19,13 @@ Vue.use(BootstrapVue)
 library.add(faGlobe)
 library.add(faFileUpload)
 library.add(faStickyNote)
+library.add(faQrcode)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueClipboards)
 Vue.use(VModal)
+Vue.use(require('vue-moment'))
 
 // This callback runs before every route change, including on page load.
 router.beforeEach((to, from, next) => {

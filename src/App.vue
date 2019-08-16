@@ -11,9 +11,10 @@
         </router-link>
 
 
-        <div v-if="$route.name == 'read2'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__reader')}}</div>
-        <div v-if="$route.name == 'NewMessage'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__new')}}</div>
-        <div v-if="$route.name == 'NewFile'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__newFile')}}</div>
+        <!--<div v-if="$route.name == 'read2'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__reader')}}</div>-->
+        <!--<div v-if="$route.name == 'readropsten2'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__reader')}}</div>-->
+        <!--<div v-if="$route.name == 'NewMessage'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__new')}}</div>-->
+        <!--<div v-if="$route.name == 'NewFile'" style="float:left;padding-left:6px;font-size:9px;padding-top:3px;color:#black;" class="sans-serif">{{$t('__newFile')}}</div>-->
 
         <!-- <div style="float:left;height:23px;width:23px;background-color:#ffdd57;"></div>
         <div style="float:left;padding-left:8px;padding-top:1px;font-size:19px;font-family:'Arapey'">{{$t('__lennonwallicu')}}</div> -->
@@ -21,6 +22,7 @@
         <div style="float:right;font-size:14px;" class="sans-serif">
           <router-link to="/new-message" class="m-2"><font-awesome-icon icon="sticky-note" size="lg" /></router-link>
           <router-link to="/new-file" class="m-2"><font-awesome-icon icon="file-upload" size="lg" /></router-link>
+          <router-link to="/qrcodegenerator" class="m-2"><font-awesome-icon icon="qrcode" size="lg" /></router-link>
           <b-dropdown size="sm" dropleft variant="white">
           <template slot="button-content">
             <font-awesome-icon icon="globe" size="lg" />

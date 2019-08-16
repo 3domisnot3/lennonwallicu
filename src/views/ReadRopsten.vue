@@ -10,26 +10,26 @@
           <div class="reader-tx-details sans-serif" style="line-height:18px;">
             {{$t('__readblockchaincharacteristic')}}<br><br>
             {{$t('__readmessagecreated')}} 
-            <a v-bind:href="'https://etherscan.io/tx/'+txHash" target="_blank"><span class="sans-serif" title="Link to Etherscan">{{ timestamp }}</span>
+            <a v-bind:href="'https://ropsten.etherscan.io/tx/'+txHash" target="_blank"><span class="sans-serif" title="Link to Ropsten.Etherscan">{{ timestamp }}</span>
           </a>
           <br>    
           <div class="overflow-dots">
             {{$t('__readhashaddress')}}
-            <a v-bind:href="'https://etherscan.io/tx/'+txHash" target="_blank" title="Link to Etherscan">{{ txHash }}</a>
+            <a v-bind:href="'https://ropsten.etherscan.io/tx/'+txHash" target="_blank" title="Link to Ropsten Etherscan">{{ txHash }}</a>
           </div>
           <br>
           <button class="btncopy m-2" v-clipboard="txHash"></button>
         </div>
         <div style="font-size:12px;height:20px;" class="overflow-dots">
-          <a v-bind:href="'/tx/'+txHash" target="_blank" style="font-size:12px;">https://lennonwall.icu/tx/{{txHash}}</a>
+          <a v-bind:href="'/ropsten/tx/'+txHash" target="_blank" style="font-size:12px;">https://lennonwall.icu/ropsten/tx/{{txHash}}</a>
         </div>
         <div style="max-width:600px;margin:0 auto;">
         <center>
-          <button class="btncopy m-2" v-clipboard="$t('__readLink',{txHashVal: txHash})"></button>
+          <button class="btncopy m-2" v-clipboard="$t('__readRopstenLink',{txHashVal: txHash})"></button>
           <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
         </center>
         <modal name="qr-code" :height="360" :width="360" transition="scale">
-          <qr-code :text="$t('__readLink',{txHashVal: txHash})" :size="350" style="margin-left:5px;margin-top:5px;"></qr-code>
+          <qr-code :text="$t('__readRopstenLink',{txHashVal: txHash})" :size="350" style="margin-left:5px;margin-top:5px;"></qr-code>
         </modal>
       </div>
       </div>
@@ -57,13 +57,13 @@ export default {
     window.scrollTo(0, 0);
     let self = this;
     
-    axios.get(mainnetApiEtherscan + '/api?module=proxy&action=eth_getTransactionByHash&txhash=' + this.txHash)
+    axios.get(ropstenApiEtherscan + '/api?module=proxy&action=eth_getTransactionByHash&txhash=' + this.txHash)
     .then(
       function (response) {
         // console.log(response);
         self.hex2utf8(response["data"]["result"]["input"]);
         self.blockNumber = response["data"]["result"]["blockNumber"];
-        axios.get(mainnetApiEtherscan + '/api?module=proxy&action=eth_getBlockByNumber&tag='+self.blockNumber+'&boolean=true')
+        axios.get(ropstenApiEtherscan + '/api?module=proxy&action=eth_getBlockByNumber&tag='+self.blockNumber+'&boolean=true')
           .then (
             function (response) {
               // console.log(response);

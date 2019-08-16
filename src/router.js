@@ -4,15 +4,14 @@ import Home from './views/Home.vue'
 import NewMessage from './views/NewMessage.vue'
 import NewFile from './views/NewFile.vue'
 import Read from './views/Read.vue'
+import ReadRopsten from './views/ReadRopsten.vue'
 import Redirect from './views/Redirect.vue'
-// import MsgIpProtection from './components/MsgIpProtection.vue';
-
 
 Vue.use(Router)
 
 export default new Router({
+  publicPath: '/',
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -95,6 +94,29 @@ export default new Router({
       meta: {
         title: '連儂牆 ICU - 閱讀記錄| Lennon Wall ICU - Read Message',
       }
-    }
+    },
+    {
+      path: '/ropsten/tx/:txHash',
+      name: 'readropsten2',
+      component: ReadRopsten,
+      props: true,
+      meta: {
+        title: '連儂牆 ICU - 閱讀 Ropsten 記錄| Lennon Wall ICU - Read Ropsten Message',
+      }
+    },
+    {
+      path: '/qrcodegenerator',
+      name: 'qrcodegenerator',
+      component: Home,
+      meta: {
+        title: '連儂牆 ICU - QRCode生產器| Lennon Wall ICU - QR Code Generator',
+        metaTags: [
+          {
+            property: 'og:description',
+            content: '連儂牆 ICU - QRCode生產器| Lennon Wall ICU - QR Code Generator'
+          }
+        ]
+      }
+    },
   ]
 })

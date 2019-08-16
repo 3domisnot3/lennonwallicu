@@ -47,8 +47,8 @@
           <button class="btncopy m-2" v-clipboard="$t('__newFileLink',{txHashVal: txHash})"></button>
           <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
         </center>
-        <modal name="qr-code" :height="350" :width="350" transition="scale">
-          <qr-code :text="$t('__newFileLink',{txHashVal: txHash})" :size="350"></qr-code>
+        <modal name="qr-code" :height="360" :width="360" transition="scale">
+          <qr-code :text="$t('__newFileLink',{txHashVal: txHash})" :size="350" style="margin-left:5px;margin-top:5px;"></qr-code>
         </modal>
       </div>
     </div>

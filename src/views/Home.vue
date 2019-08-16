@@ -1,12 +1,7 @@
 <template>
   <div class="home">
-
-
-
     <div class="home-content">
-
-      <div v-if="$route.name != 'about'">
-
+      <div v-if="$route.name != 'about' && $route.name != 'qrcodegenerator'">
         <div class="centered" v-if="!$parent.content">
 
           <span>
@@ -34,82 +29,81 @@
         </div>
 
         <div class="content-block" style="margin-top:0px;">
-        
           <reader-component @isContent="isContent"/>
-
+        </div>
+        <div class="content-block" style="margin-top:0px;">
+          <lennon-wall-component/>
         </div>
 
       </div>
 
       <div v-if="$route.name == 'about'">
 
-      <div class="content-block" style="margin-top:0px;">
-       <h2 style="text-align:left;margin-bottom:40px;">{{$t('__aboutUs')}}</h2>
+        <div class="content-block" style="margin-top:0px;">
+          <h2 style="text-align:left;margin-bottom:40px;">{{$t('__aboutUs')}}</h2>
 
-        <span v-html="$t('__aboutUsText')"></span>
-        <div style="max-width:600px;margin:0 auto;">
-          <center>
-            <button class="btncopy m-2" v-clipboard="$t('__ethAddress')"></button>
-            <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
-          </center>
-          <modal name="qr-code" :height="350" :width="350" transition="scale">
-            <qr-code :text="$t('__ethAddress')" :size="350"></qr-code>
-          </modal>
+          <span v-html="$t('__aboutUsText')"></span>
+          <div style="max-width:600px;margin:0 auto;">
+            <center>
+              <button class="btncopy m-2" v-clipboard="$t('__ethAddress')"></button>
+              <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
+            </center>
+            <modal name="qr-code" :height="360" :width="360" transition="scale">
+              <qr-code :text="$t('__ethAddress')" :size="350"></qr-code>
+            </modal>
+          </div>
+          <br>
+          <br>
+          <h2 style="text-align:left;margin-bottom:40px;">{{$t('__aboutHowItworks')}}</h2>
+
+          <span v-html="$t('__aboutReadTitle')"></span>
+          <ul>
+            <li>
+              <span v-html="$t('__aboutReadMethod1')"></span>
+            </li>
+            <li>
+              <span v-html="$t('__aboutReadMethod2')"></span>
+            </li>
+          </ul>
+          <br>
+          <br>
+          <span v-html="$t('__aboutNewMessageTitle')"></span>
+          <ul>
+            <li>
+              <span v-html="$t('__newheadDisclaimer')"></span>
+            </li>
+            <li>
+              <span v-html="$t('__newheadProcedure')"></span>
+            </li>
+          </ul>
         </div>
-        <br>
-        <br>
-        <h2 style="text-align:left;margin-bottom:40px;">{{$t('__aboutHowItworks')}}</h2>
-
-       <span v-html="$t('__aboutReadTitle')"></span>
-        <ul>
-          <li>
-             <span v-html="$t('__aboutReadMethod1')"></span>
-          </li>
-          <li>
-            <span v-html="$t('__aboutReadMethod2')"></span>
-          </li>
-        </ul>
-
-        <br>
-        <br>
-        
-        <span v-html="$t('__aboutNewMessageTitle')"></span>
-        <ul>
-          <li>
-            <span v-html="$t('__newheadDisclaimer')"></span>
-          </li>
-          <li>
-            <span v-html="$t('__newheadProcedure')"></span>
-          </li>
-        </ul>
-
-       
       </div>
-
-
+      <div v-if="$route.name == 'qrcodegenerator'">
+        <div class="content-block" style="margin-top:0px;">
+          <h2 style="text-align:left;margin-bottom:40px;">{{$t('__qrcodegen')}}</h2>
+          <b-form-input type="text" v-model="qrcodemessage" />
+          <div style="height:10px;"></div>
+          <qr-code :text="qrcodemessage"></qr-code>
+        </div>
       </div>
-
-
     </div>
   </div>
 </template>
 
 <script>
-// import MsgIpProtection from '../components/MsgIpProtection.vue';
-// import FileInput from '../components/FileInput.vue';
 import ReaderComponent from '../components/ReaderComponent.vue';
+import LennonWallComponent from '../components/LennonWallComponent.vue';
 
 export default {
   name: 'home',
   data: function() {
     return {
-      
+      qrcodemessage: this.$t('__qrcodeplaceholder'),
     }
   },
   components: {
-    // FileInput,
-    ReaderComponent
-    // MsgIpProtection
+    ReaderComponent,
+    LennonWallComponent,
   },
 
   beforeMount () {
@@ -218,7 +212,7 @@ export default {
     max-width: 740px;
     margin: 0 auto;
     clear:both;
-    padding-top: 80px;
+    padding-top: 20px;
     padding-bottom: 120px;
     text-align: left;
     font-size: 14px;

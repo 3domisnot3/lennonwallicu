@@ -4,6 +4,7 @@
     <!-- New message -->
     <div style="max-width:620px;margin:0 auto;margin-top:100px;">
       <h1 style="font-size:14px;margin-bottom:30px;"><span v-html="$t('__newheadline')"></span></h1>
+      <h1 style="font-size:12px;margin-bottom:30px;"><span v-html="$t('__newheadline2')"></span></h1>
 
       <b-button v-b-toggle.collapse-1>{{$t('__newGuidelineButton')}}</b-button>
       <b-collapse id="collapse-1" class="mt-2">
@@ -53,14 +54,29 @@
     </div>
     <div v-if="showConfirmationAlert" style="text-align:center;margin-bottom:-10px;max-width:620px;margin:0 auto;">
       <b-alert variant="success" show>{{$t('__newWeb3Confirmation', {confirmVal: web3confirm, hashVal: txHash})}}</b-alert>
-      <div v-html="txlink"></div>
+        <span v-if="networkTypeId == 'mainnet'" class="m-2">
+          <a v-bind:href="'/tx/'+txHash" target="_blank" style="font-size:12px;">https://lennonwall.icu/tx/{{txHash}}</a>
+        </span>
+        <span v-if="networkTypeId == 'ropsten'" class="m-2">
+          <a v-bind:href="'/ropsten/tx/'+txHash" target="_blank" style="font-size:12px;">https://lennonwall.icu/ropsten/tx/{{txHash}}</a>
+        </span>
       <div style="max-width:600px;margin:0 auto;">
         <center>
-          <button class="btncopy m-2" v-clipboard="$t('__readLink',{txHashVal: txHash})"></button>
+          <span v-if="networkTypeId == 'mainnet'" class="m-2">
+            <button class="btncopy m-2" v-clipboard="$t('__readLink',{txHashVal: txHash})"></button>
+          </span>
+          <span v-if="networkTypeId == 'ropsten'" class="m-2">
+            <button class="btncopy m-2" v-clipboard="$t('__readRopstenLink',{txHashVal: txHash})"></button>
+          </span>
           <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
         </center>
-        <modal name="qr-code" :height="350" :width="350" transition="scale">
-          <qr-code :text="$t('__readLink',{txHashVal: txHash})" :size="350"></qr-code>
+        <modal name="qr-code" :height="360" :width="360" transition="scale">
+          <span v-if="networkTypeId == 'mainnet'">
+            <qr-code :text="$t('__readLink',{txHashVal: txHash})" :size="350" style="margin-left:5px;margin-top:5px;"></qr-code>
+          </span>
+          <span v-if="networkTypeId == 'ropsten'">
+            <qr-code :text="$t('__readRopstenLink',{txHashVal: txHash})" :size="350" style="margin-left:5px;margin-top:5px;"></qr-code>
+          </span>
         </modal>
       </div>
     </div>
@@ -128,6 +144,7 @@ export default {
       web3error: '',
       txlink: '',
       txHash: '',
+      networkTypeId: '',
     }
   },
 
@@ -181,6 +198,11 @@ export default {
 
       let self = this;
 
+      web3.eth.net.getNetworkType()
+        .then(function(netType){
+          self.networkTypeId = netType;
+        });
+
       web3.eth.sendTransaction({
         from: web3.currentProvider.publicConfigStore._state.selectedAddress,
         to: address,
@@ -196,7 +218,6 @@ export default {
       .on('confirmation', function(confNumber, receipt){
         self.showConfirmationAlert = true;
         self.web3confirm = confNumber + 1;
-        self.txlink = '<a href="/tx/'+ self.txHash +'" style="font-size:12px;" target="_blank">https://lennonwall.icu/tx/' + self.txHash + '</a>';
       })
       .on('error', function(error){
         self.showErrorAlert = true;
