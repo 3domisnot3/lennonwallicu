@@ -826,7 +826,7 @@ export default {
 
 	  let self = this;
 
-      var contract = new web3.eth.Contract(abi, "0xfc70f9d126a574495996a5a390fa338c7cb88527");
+      var contract = new web3.eth.Contract(abi, "0x892A4EDa13Cf846C8C352445817262a7e4f78fF0");
       contract.methods.postHash(this.form.categorySelect,this.form.caption, this.form.imgIpfsHash, this.form.videoIpfsHash, this.form.ethHash)
       .send({ from: web3.currentProvider.publicConfigStore._state.selectedAddress },
               (error, transactionHash) => {
