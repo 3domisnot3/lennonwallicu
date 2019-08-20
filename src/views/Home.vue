@@ -159,7 +159,7 @@ export default {
   }
 
   .home {
-    max-width: 1032px;
+    //max-width: 1032px;
     height: 100%;
     margin: 0 auto;
     margin-top: 20px;
@@ -209,7 +209,7 @@ export default {
   }
 
   .home-content {
-    max-width: 740px;
+    //max-width: 740px;
     margin: 0 auto;
     clear:both;
     padding-top: 20px;

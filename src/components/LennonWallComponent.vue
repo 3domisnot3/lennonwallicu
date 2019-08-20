@@ -9,12 +9,12 @@
 	<span v-for="cater in categoryList">
 		<b-button variant="warning" class="m-1" @click="fetchPosts(cater.id,null,null)" size="sm">{{cater.catName}}</b-button>
 	</span>
-    <b-collapse id="collapse-1" class="mt-2">
+    <b-collapse id="collapse-1" v-model="showCollapse" class="mt-2">
       <b-card>
 	  	<center>
           	<div class="col-sm-6 col-sm-offset-3">
             <div class="panel-heading">
-                <h3>寫進連儂牆</h3>
+                <h4>寫進連儂牆</h4>
             </div>
 			<div v-if="showRemindAlert" style="text-align:center;padding-top:5px;margin-bottom:-5px;max-width:620px;margin:0 auto;">
 			<b-alert variant="info" show>{{remindContent}}</b-alert>
@@ -138,7 +138,7 @@
     <div style="height: 10px;"></div>
 	<b-container>
 	<b-row>
-    <b-col v-for="post in currentPosts" v-if="!post.removed" cols="12" md="4" class="">
+    <b-col v-for="post in currentPosts" v-if="!post.removed" cols="12" md="4" xl="3" lg="3">
       <b-card 
         img-alt="Image"
         img-top
@@ -153,7 +153,7 @@
 	  	<div style="height: 10px;"></div>
 	  	<span v-if="post.imageIpfsHash">
 		  	<a v-bind:href="$t('__newFileLink',{txHashVal: post.imageIpfsHash})" target="_blank">
-			<button class="btnimage btn-warning m-1" aria-pressed="true"></button>
+			<button class="btnimage btn-warning m-1" aria-pressed="true" style="background-color:#ffc107!important;"></button>
 			</a>
 			<button class="btnhash m-1" v-clipboard="post.imageIpfsHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__newFileLink',{txHashVal: post.imageIpfsHash})"></button>
@@ -164,7 +164,7 @@
 		</span>
 		<span v-if="post.videoIpfsHash">
 			<a v-bind:href="$t('__newFileLink',{txHashVal: post.videoIpfsHash})" target="_blank">
-			<button class="btnvideo btn-warning m-1" aria-pressed="true"></button>
+			<button class="btnvideo btn-warning m-1" aria-pressed="true" style="background-color:#ffc107!important;"></button>
 			</a>
 			<button class="btnhash m-1" v-clipboard="post.videoIpfsHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__newFileLink',{txHashVal: post.videoIpfsHash})"></button>
@@ -177,7 +177,7 @@
 			<a v-bind:href="$t('__readRopstenLink',{txHashVal: post.ethHash})" target="_blank">
 			<button class="btnstickynote btn-warning m-1" aria-pressed="true"></button>
 			</a>
-			<button class="btnhash m-1" v-clipboard="post.ethHash"></button>
+			<button class="btnhash m-1" v-clipboard="post.ethHash" style="background-color:#ffc107!important;"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__readRopstenLink',{txHashVal: post.ethHash})"></button>
 			<button class="btnqrcode m-1" @click="$modal.show('qr-code-text-'+post.id);"></button>
 			<modal v-bind:name="'qr-code-text-'+post.id" :height="360" :width="360" transition="scale">
@@ -1061,6 +1061,7 @@ export default {
 	  currentCategoryListing: null,
 	  currentTagFilter: null,
 	  currentAddressFilter: null,
+	  showCollapse: false,
     }
   },
 
@@ -1092,11 +1093,55 @@ export default {
   },
 
   async created() {
+	await this.loadCategory();
     await this.fetchPosts();
   },
 
   // Methods required to run
   methods: {
+	async loadCategory() {
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			try {
+			// Request account access if needed
+			ethereum.enable();
+			} catch (error) {
+			// User denied account access...
+			}
+		} else if (window.web3) {
+			// Legacy dapp browsers...
+			window.web3 = new Web3(web3.currentProvider);
+		} else {
+			window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ropsten.infura.io/ws"));
+		}
+
+      	var contract = new web3.eth.Contract(abi, contractAddress);
+
+		//GetCategory
+		const categoryCounter = await contract.methods.getCategoryCounter().call({
+			from: this.currentAccount,
+		});
+		const catFromContract = [];
+		if (categoryCounter !== null) {
+			for (let i = 0; i < categoryCounter; i += 1) {
+				catFromContract.push(contract.methods.getCategory(i).call({
+					from: this.currentAccount,
+				}));
+			}
+		}
+    	const cat = await Promise.all(catFromContract);
+		var categoryPlaceholder = [
+        	{value: null, text:'請選擇'},
+        ];
+	  	for (let i = 0; i < cat.length; i += 1) {
+          categoryPlaceholder.push({
+            value: i,
+            text: cat[i].catName,
+          });
+        }
+		this.categoryList = cat;
+	  	this.categoryOptions = categoryPlaceholder;	
+	},
     async fetchPosts(catId = null, tagFilter = null, address = null) {
 		this.currentCategoryListing = catId;
 		this.currentTagFilter = tagFilter;
@@ -1129,18 +1174,14 @@ export default {
 			const categoryPostsFromContract = [];
 			if (categoryPostCounter !== null && categoryPostCounter > 0) {
 				for (let i = categoryPostCounter - 1; i >= 0; i -= 1) {
-					try
-					{
-						var tempPost = await contract.methods.getPostByCategoryItem(this.currentCategoryListing,i).call({
+					contract.methods.getPostByCategoryItem(this.currentCategoryListing,i).call({
 							from: this.currentAccount,
-						});
-						tempPost['id'] = i;
-						categoryPostsFromContract.push(tempPost);
-					}
-					catch (ex)
-					{
-
-					}
+						}).then(function(tempPost)
+						{	
+							tempPost['id'] = i;
+							categoryPostsFromContract.push(tempPost);
+						})
+						.catch(function(error){});
 				}
 			}
 			posts = categoryPostsFromContract;
@@ -1154,18 +1195,14 @@ export default {
 			const tagPostsFromContract = [];
 			if (tagRecordCounter !== null && tagRecordCounter > 0) {
 				for (let i = tagRecordCounter - 1; i >= 0; i -= 1) {
-					try
-					{
-						var tempPost = await contract.methods.getPostByTagRecord(this.currentTagFilter,i).call({
+					contract.methods.getPostByTagRecord(this.currentTagFilter,i).call({
 							from: this.currentAccount,
-						});
-						tempPost['id'] = i;
-						tagPostsFromContract.push(tempPost);
-					}
-					catch (ex)
-					{
-
-					}
+						}).then(function(tempPost)
+						{	
+							tempPost['id'] = i;
+							tagPostsFromContract.push(tempPost);
+						})
+						.catch(function(error){});
 				}
 			}
 			posts = tagPostsFromContract;
@@ -1179,18 +1216,14 @@ export default {
 			const addressPostsFromContract = [];
 			if (postingRecordCounter !== null && postingRecordCounter > 0) {
 				for (let i = postingRecordCounter - 1; i >= 0; i -= 1) {
-					try
-					{
-						var tempPost = await contract.methods.getPostByAddressItem(this.currentAddressFilter,i).call({
+					contract.methods.getPostByAddressItem(this.currentAddressFilter,i).call({
 							from: this.currentAccount,
-						});
-						tempPost['id'] = i;
-						addressPostsFromContract.push(tempPost);
-					}
-					catch (ex)
-					{
-
-					}
+						}).then(function(tempPost)
+						{	
+							tempPost['id'] = i;
+							addressPostsFromContract.push(tempPost);
+						})
+						.catch(function(error){});
 				}
 			}
 			posts = addressPostsFromContract;
@@ -1204,48 +1237,24 @@ export default {
 			const postsFromContract = [];
 			if (counter !== null) {
 				for (let i = counter; i >= 1; i -= 1) {
-					try
-					{
-						var tempPost = await contract.methods.getHash(i).call({
+					contract.methods.getHash(i).call({
 							from: this.currentAccount,
-						});
-						tempPost['id'] = i;
-						postsFromContract.push(tempPost);
-					}
-					catch (ex)
-					{
-
-					}
+						}).then(function(tempPost)
+						{	
+							tempPost['id'] = i;
+							postsFromContract.push(tempPost);
+						})
+						.catch(function(error){});
 				}
 			}
 			posts = postsFromContract;
 		}
 
-		//GetCategory
-		const categoryCounter = await contract.methods.getCategoryCounter().call({
-			from: this.currentAccount,
-		});
-		const catFromContract = [];
-		if (categoryCounter !== null) {
-			for (let i = 0; i < categoryCounter; i += 1) {
-				catFromContract.push(contract.methods.getCategory(i).call({
-					from: this.currentAccount,
-				}));
-			}
-		}
-    	const cat = await Promise.all(catFromContract);
-		var categoryPlaceholder = [
-        	{value: null, text:'請選擇'},
-        ];
-	  	for (let i = 0; i < cat.length; i += 1) {
-          categoryPlaceholder.push({
-            value: i,
-            text: cat[i].catName,
-          });
-        }
-		this.categoryList = cat;
-	  	this.categoryOptions = categoryPlaceholder;
+		
       	this.currentPosts = posts;
+
+		this.showCollapse = false;
+	  	onReset();
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -1317,7 +1326,6 @@ export default {
         		  self.web3error = error;
                 }
               });
-
     },
     onReset(evt) {
         evt.preventDefault();
