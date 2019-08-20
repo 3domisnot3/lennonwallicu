@@ -95,7 +95,7 @@
               <div class="form-group"> 
                 <b-form-input 
 					v-model="form.ethHash" 
-					placeholder="以太坊文字哈希 Ethereum Text Hash" 
+					placeholder="以太坊 Ropsten 文字哈希 Ethereum Ropsten Text Hash" 
 					size="sm"
 					:state="ethHashState" 
 					aria-describedby="input-ethHash-help input-ethHash-feedback"
@@ -175,9 +175,9 @@
 		</span>
 		<span v-if="post.ethHash!=''">
 			<a v-bind:href="$t('__readRopstenLink',{txHashVal: post.ethHash})" target="_blank">
-			<button class="btnstickynote btn-warning m-1" aria-pressed="true"></button>
+			<button class="btnstickynote btn-warning m-1" aria-pressed="true" style="background-color:#ffc107!important;"></button>
 			</a>
-			<button class="btnhash m-1" v-clipboard="post.ethHash" style="background-color:#ffc107!important;"></button>
+			<button class="btnhash m-1" v-clipboard="post.ethHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__readRopstenLink',{txHashVal: post.ethHash})"></button>
 			<button class="btnqrcode m-1" @click="$modal.show('qr-code-text-'+post.id);"></button>
 			<modal v-bind:name="'qr-code-text-'+post.id" :height="360" :width="360" transition="scale">
@@ -1254,7 +1254,7 @@ export default {
       	this.currentPosts = posts;
 
 		this.showCollapse = false;
-	  	onReset();
+	  	this.onReset();
     },
     onSubmit(evt) {
       evt.preventDefault();
