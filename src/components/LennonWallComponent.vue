@@ -208,6 +208,57 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_catName",
+				"type": "string"
+			}
+		],
+		"name": "addCategory",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "addPauser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "banHash",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_categoryId",
 				"type": "uint256"
@@ -226,6 +277,15 @@ const abi = [
 				"type": "bool"
 			}
 		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "pause",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -276,116 +336,36 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "renouncePauser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
 		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_tagName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_tagItemId",
-				"type": "uint256"
-			}
-		],
-		"name": "getPostByTagRecord",
-		"outputs": [
 			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "newOwner",
 				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "caption",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "message",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ethHash",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "categoryId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "tags",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "postTime",
-				"type": "uint256"
 			}
 		],
+		"name": "transferOwnership",
+		"outputs": [],
 		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "categoryPosts",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_tagName",
-				"type": "string"
-			}
-		],
-		"name": "getTagRecordCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -405,487 +385,11 @@ const abi = [
 	},
 	{
 		"constant": false,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_catName",
-				"type": "string"
-			}
-		],
-		"name": "addCategory",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_addressItemId",
-				"type": "uint256"
-			}
-		],
-		"name": "getPostByAddressItem",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "caption",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "message",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ethHash",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "categoryId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "tags",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "postTime",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "banHash",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
 		"inputs": [],
 		"name": "unpause",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "isPauser",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "paused",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_categoryId",
-				"type": "uint256"
-			}
-		],
-		"name": "getCategoryPostCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "getHash",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "caption",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "messsage",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ethHash",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "categoryId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "tags",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "postTime",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "renouncePauser",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "addPauser",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "pause",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "isOwner",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "tagRecord",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "getPostingRecordCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getCategoryCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_categoryId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_categoryItemId",
-				"type": "uint256"
-			}
-		],
-		"name": "getPostByCategoryItem",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "caption",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "message",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ethHash",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "categoryId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "tags",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "postTime",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_index",
-				"type": "uint256"
-			}
-		],
-		"name": "getCategory",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "catName",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -1027,6 +531,502 @@ const abi = [
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "categoryPosts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getCategory",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "catName",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCategoryCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_categoryId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCategoryPostCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getHash",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_addressItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByAddressItem",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_categoryItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByCategoryItem",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_tagName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_tagItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByTagRecord",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "getPostingRecordCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_tagName",
+				"type": "string"
+			}
+		],
+		"name": "getTagRecordCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "isOwner",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "isPauser",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "tagRecord",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ];
 
@@ -1323,6 +1323,7 @@ export default {
         evt.preventDefault();
         // Reset our form values
         this.form.caption = '';
+		this.form.message = '';
         this.form.categorySelect = null;
         this.form.imgIpfsHash = '';
         this.form.videoIpfsHash = '';
