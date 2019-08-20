@@ -1,7 +1,14 @@
 <template>
   <!-- Main Body of the Application -->
   <div class="container reader-input">
-    <b-button v-b-toggle.collapse-1>寫進連儂牆 v0.3 (Ropsten 測試網)(測試期資料不會帶至新版本)</b-button>
+	<br>
+	<br>
+	<h4>連儂牆 (Ropsten 測試網)<br></h4><br>
+	<b-button v-b-toggle.collapse-1 class="m-1" size="sm">寫進連儂牆</b-button>
+	<b-button variant="warning" class="m-1" @click="fetchPosts(null,null,null)" size="sm">全部</b-button>
+	<span v-for="cater in categoryList">
+		<b-button variant="warning" class="m-1" @click="fetchPosts(cater.id,null,null)" size="sm">{{cater.catName}}</b-button>
+	</span>
     <b-collapse id="collapse-1" class="mt-2">
       <b-card>
 	  	<center>
@@ -24,7 +31,7 @@
 					aria-describedby="input-caption-help input-caption-feedback"
 				></b-form-input>
 				<b-form-invalid-feedback id="input-caption-feedback">
-				標題不可長於20字
+				標題不可長於40字
 				</b-form-invalid-feedback>
 				<b-form-text id="input-caption-help">標題</b-form-text>
               </div>
@@ -43,6 +50,20 @@
 				</b-form-invalid-feedback>
 				<b-form-text id="input-category-help">分類</b-form-text>
               </div>
+			  <div class="form-group">
+			  	<b-form-textarea
+				id="textarea"
+				v-model="form.message"
+				rows="3"
+				max-rows="6"
+				:state="messageState"
+				aria-describedby="input-message-help input-message-feedback"
+				></b-form-textarea>
+				<b-form-invalid-feedback id="input-message-feedback">
+				不可長於200字
+				</b-form-invalid-feedback>
+				<b-form-text id="input-message-help">內容</b-form-text>
+			  </div>
               <div class="form-group">       
                 <b-form-input 
 					v-model="form.imgIpfsHash" 
@@ -85,6 +106,20 @@
 				</b-form-invalid-feedback>
 				<b-form-text id="input-ethHash-help">以太坊文字哈希 Ethereum Text Hash</b-form-text>
               </div>
+			  <div class="form-group"> 
+                <b-form-input 
+					v-model="form.tags" 
+					placeholder="標籤 (以空格分隔)" 
+					size="sm"
+					:state="tagsState" 
+					aria-describedby="input-tags-help input-tags-feedback"
+					trim
+				></b-form-input>
+				<b-form-invalid-feedback id="input-tags-feedback">
+				不可多於20個標籤
+				</b-form-invalid-feedback>
+				<b-form-text id="input-tags-help">標籤 (以空格分隔)</b-form-text>
+              </div>
                 <b-button type="submit" variant="warning" class="m-2">提交</b-button>
                 <b-button type="reset" variant="outline-primary" class="m-2">重設</b-button>
 				<!--<pre class="m-0">{{ form }}</pre>-->
@@ -93,24 +128,32 @@
 		</center>
       </b-card>
     </b-collapse>
+	<div style="height: 10px;"></div>
+	<div v-if="showFilter">
+		當前過濾器: 
+		<b-button variant="outline-dark" class="m-1" size="sm" v-if="this.currentCategoryListing != null">{{categoryList[currentCategoryListing].catName}}</b-button>
+		<b-button variant="outline-dark" class="m-1" size="sm" v-if="this.currentTagFilter != null">#{{currentTagFilter}}</b-button>
+		<b-button variant="outline-dark" class="m-1" size="sm" v-if="this.currentAddressFilter != null">{{currentAddressFilter}}</b-button>
+	</div>
     <div style="height: 10px;"></div>
 	<b-container>
 	<b-row>
-    <b-col v-for="post in currentPosts" cols="12" md="4">
+    <b-col v-for="post in currentPosts" v-if="!post.removed" cols="12" md="4" class="">
       <b-card 
         img-alt="Image"
         img-top
         title-tag="h6"
-		v-if="!post.removed"
 		v-bind:title="post.caption"
-        v-bind:img-src="post.imageIpfsHash === '' ? '':'https://ipfs.io/ipfs/'+post.imageIpfsHash"
+        v-bind:img-src="post.imageIpfsHash === '' ? '':'https://ipfs.infura.io/ipfs/'+post.imageIpfsHash"
 		style="fontSize: 12px"
       >
-	  	<b-button pill variant="outline-secondary" size="sm">{{ categoryList[post.categoryId] }}</b-button>
+	  	<b-button pill variant="outline-dark" size="sm" @click="fetchPosts(categoryList[post.categoryId].id)">{{ categoryList[post.categoryId].catName }}</b-button>
+		<div style="height: 10px;"></div>
+		{{post.message}}
 	  	<div style="height: 10px;"></div>
 	  	<span v-if="post.imageIpfsHash">
-		  	<a v-bind:href="$t('__newFileLink',{txHashVal: post.imageIpfsHash})">
-			<button class="btnimage btn-warning m-1" ></button>
+		  	<a v-bind:href="$t('__newFileLink',{txHashVal: post.imageIpfsHash})" target="_blank">
+			<button class="btnimage btn-warning m-1" aria-pressed="true"></button>
 			</a>
 			<button class="btnhash m-1" v-clipboard="post.imageIpfsHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__newFileLink',{txHashVal: post.imageIpfsHash})"></button>
@@ -120,8 +163,8 @@
 			</modal>
 		</span>
 		<span v-if="post.videoIpfsHash">
-			<a v-bind:href="$t('__newFileLink',{txHashVal: post.videoIpfsHash})">
-			<button class="btnvideo btn-warning m-1"></button>
+			<a v-bind:href="$t('__newFileLink',{txHashVal: post.videoIpfsHash})" target="_blank">
+			<button class="btnvideo btn-warning m-1" aria-pressed="true"></button>
 			</a>
 			<button class="btnhash m-1" v-clipboard="post.videoIpfsHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__newFileLink',{txHashVal: post.videoIpfsHash})"></button>
@@ -131,8 +174,8 @@
 			</modal>
 		</span>
 		<span v-if="post.ethHash!=''">
-			<a v-bind:href="$t('__readRopstenLink',{txHashVal: post.ethHash})">
-			<button class="btnstickynote btn-warning m-1"></button>
+			<a v-bind:href="$t('__readRopstenLink',{txHashVal: post.ethHash})" target="_blank">
+			<button class="btnstickynote btn-warning m-1" aria-pressed="true"></button>
 			</a>
 			<button class="btnhash m-1" v-clipboard="post.ethHash"></button>
 			<button class="btncopy m-1" v-clipboard="$t('__readRopstenLink',{txHashVal: post.ethHash})"></button>
@@ -142,7 +185,11 @@
 			</modal>
 		</span>
 		<div style="height: 10px;"></div>
-		上載者: <span style="fontSize: 8px">{{post.owner}}</span>
+		<span v-if="post.tags!=''" v-for="tag in post.tags.split(' ')">
+		<b-link @click="fetchPosts(null,tag,null)" class="m-1">#{{ tag }}</b-link>
+		</span>
+		<div style="height: 10px;"></div>
+		上載者: <span style="fontSize: 8px"><b-link size="sm" @click="fetchPosts(null,null,post.owner)">{{ post.owner }}</b-link></span>
 		<br>
 		上載於: {{ Number(post.postTime) | moment("YYYY-MM-DD HH:mm") }}
 		<!--<pre class="m-0">{{ post }}</pre>-->
@@ -161,10 +208,12 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "_categoryId",
 				"type": "uint256"
 			},
 			{
+				"internalType": "string",
 				"name": "_catName",
 				"type": "string"
 			}
@@ -172,6 +221,7 @@ const abi = [
 		"name": "modifyCategory",
 		"outputs": [
 			{
+				"internalType": "bool",
 				"name": "",
 				"type": "bool"
 			}
@@ -184,30 +234,170 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_catName",
+				"internalType": "uint256",
+				"name": "_categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_tags",
 				"type": "string"
 			}
 		],
-		"name": "addCategory",
+		"name": "postHash",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_tagName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_tagItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByTagRecord",
 		"outputs": [
 			{
-				"name": "",
-				"type": "bool"
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "categoryPosts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_tagName",
+				"type": "string"
+			}
+		],
+		"name": "getTagRecordCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "_index",
 				"type": "uint256"
 			}
 		],
-		"name": "banHash",
+		"name": "unbanHash",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -217,23 +407,99 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_parentId",
-				"type": "uint256"
-			},
-			{
-				"name": "_imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"name": "_videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"name": "_ethHash",
+				"internalType": "string",
+				"name": "_catName",
 				"type": "string"
 			}
 		],
-		"name": "replyHash",
+		"name": "addCategory",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_addressItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByAddressItem",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "banHash",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -252,6 +518,7 @@ const abi = [
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -259,6 +526,7 @@ const abi = [
 		"name": "isPauser",
 		"outputs": [
 			{
+				"internalType": "bool",
 				"name": "",
 				"type": "bool"
 			}
@@ -273,6 +541,7 @@ const abi = [
 		"name": "paused",
 		"outputs": [
 			{
+				"internalType": "bool",
 				"name": "",
 				"type": "bool"
 			}
@@ -282,23 +551,31 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
-				"name": "_index",
+				"internalType": "uint256",
+				"name": "_categoryId",
 				"type": "uint256"
 			}
 		],
-		"name": "releaseHash",
-		"outputs": [],
+		"name": "getCategoryPostCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "_index",
 				"type": "uint256"
 			}
@@ -306,48 +583,49 @@ const abi = [
 		"name": "getHash",
 		"outputs": [
 			{
-				"name": "id",
-				"type": "uint256"
-			},
-			{
+				"internalType": "address",
 				"name": "owner",
 				"type": "address"
 			},
 			{
+				"internalType": "string",
 				"name": "caption",
 				"type": "string"
 			},
 			{
+				"internalType": "string",
+				"name": "messsage",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
 				"name": "imageIpfsHash",
 				"type": "string"
 			},
 			{
+				"internalType": "string",
 				"name": "videoIpfsHash",
 				"type": "string"
 			},
 			{
+				"internalType": "string",
 				"name": "ethHash",
 				"type": "string"
 			},
 			{
+				"internalType": "uint256",
 				"name": "categoryId",
 				"type": "uint256"
 			},
 			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
 				"name": "postTime",
 				"type": "uint256"
-			},
-			{
-				"name": "replyTime",
-				"type": "uint256"
-			},
-			{
-				"name": "removed",
-				"type": "bool"
-			},
-			{
-				"name": "exists",
-				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -376,6 +654,7 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -396,41 +675,12 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_categoryId",
-				"type": "uint256"
-			},
-			{
-				"name": "_caption",
-				"type": "string"
-			},
-			{
-				"name": "_imageIpfsHash",
-				"type": "string"
-			},
-			{
-				"name": "_videoIpfsHash",
-				"type": "string"
-			},
-			{
-				"name": "_ethHash",
-				"type": "string"
-			}
-		],
-		"name": "postHash",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [],
 		"name": "getCounter",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -445,6 +695,7 @@ const abi = [
 		"name": "owner",
 		"outputs": [
 			{
+				"internalType": "address",
 				"name": "",
 				"type": "address"
 			}
@@ -459,6 +710,7 @@ const abi = [
 		"name": "isOwner",
 		"outputs": [
 			{
+				"internalType": "bool",
 				"name": "",
 				"type": "bool"
 			}
@@ -471,19 +723,43 @@ const abi = [
 		"constant": true,
 		"inputs": [
 			{
-				"name": "_categoryId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			},
 			{
-				"name": "_start",
+				"internalType": "uint256",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "getpostsByCategory",
+		"name": "tagRecord",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
-				"type": "uint256[20]"
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "getPostingRecordCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -496,7 +772,74 @@ const abi = [
 		"name": "getCategoryCounter",
 		"outputs": [
 			{
+				"internalType": "uint256",
 				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_categoryItemId",
+				"type": "uint256"
+			}
+		],
+		"name": "getPostByCategoryItem",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "caption",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoIpfsHash",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "ethHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "categoryId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tags",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTime",
 				"type": "uint256"
 			}
 		],
@@ -508,6 +851,7 @@ const abi = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
 			}
@@ -522,6 +866,7 @@ const abi = [
 		"constant": true,
 		"inputs": [
 			{
+				"internalType": "uint256",
 				"name": "_index",
 				"type": "uint256"
 			}
@@ -529,6 +874,12 @@ const abi = [
 		"name": "getCategory",
 		"outputs": [
 			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
 				"name": "catName",
 				"type": "string"
 			}
@@ -540,6 +891,7 @@ const abi = [
 	{
 		"inputs": [
 			{
+				"internalType": "contract ERC20Mintable",
 				"name": "_token",
 				"type": "address"
 			}
@@ -553,8 +905,15 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
 			}
 		],
 		"name": "NewPost",
@@ -565,23 +924,13 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
-				"name": "id",
-				"type": "uint256"
-			}
-		],
-		"name": "NewReply",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
+				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
 			},
 			{
 				"indexed": true,
+				"internalType": "string",
 				"name": "catName",
 				"type": "string"
 			}
@@ -594,11 +943,13 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
 				"name": "id",
 				"type": "uint256"
 			},
 			{
 				"indexed": true,
+				"internalType": "string",
 				"name": "catName",
 				"type": "string"
 			}
@@ -611,6 +962,7 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -623,6 +975,7 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -635,6 +988,7 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -647,6 +1001,7 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "address",
 				"name": "account",
 				"type": "address"
 			}
@@ -659,11 +1014,13 @@ const abi = [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "address",
 				"name": "previousOwner",
 				"type": "address"
 			},
 			{
 				"indexed": true,
+				"internalType": "address",
 				"name": "newOwner",
 				"type": "address"
 			}
@@ -673,22 +1030,26 @@ const abi = [
 	}
 ];
 
+const contractAddress = "0x8e5AA2B106650BF6ccD2584dC11fca993A8fdE69";
+
 export default {
   name: 'LennonWallComponent',
   // Data held here for the application
   data: function() {
     return {
-      postTemplate: { id: '', caption: '', categoryId: '', imageHash: '', videoHash: '', ethHash: ''},
+      postTemplate: { id: '', caption: '', categoryId: '', imageHash: '', videoHash: '', ethHash: '', tags: ''},
       categoryOptions: [
         {value: null, text:'請選擇分類'}
         ],
       currentPosts: [],
       form: {
         caption: '',
+		message: '',
         categorySelect: null,
         imgIpfsHash: '',
         videoIpfsHash: '',
         ethHash: '',
+		tags: '',
 		wallQRcode: '',
       },
       show: true,
@@ -697,15 +1058,21 @@ export default {
       remindContent: '',
 	  showErrorAlert: false,
       web3error: '',
+	  currentCategoryListing: null,
+	  currentTagFilter: null,
+	  currentAddressFilter: null,
     }
   },
 
   computed:{
 	  captionState(){
-		  return this.form.caption.length <= 20;
+		  return this.form.caption.length <= 40;
 	  },
 	  categoryState(){
 		  return this.form.categorySelect != null;
+	  },
+	  messageState(){
+		  return this.form.message.length <=200;
 	  },
 	  imgIpfsState(){
 		  return (this.form.imgIpfsHash == "") ? true : (this.form.imgIpfsHash[0]=='Q' && this.form.imgIpfsHash[1]=='m')
@@ -716,6 +1083,12 @@ export default {
 	  ethHashState(){
 		  return (this.form.ethHash == "") ? true : (this.form.ethHash[0]=='0' && this.form.ethHash[1]=='x')
 	  },
+	  tagsState(){
+		  return this.form.tags.length <=100;
+	  },
+	  showFilter(){
+		  return this.currentAddressFilter || this.currentTagFilter || this.currentCategoryListing
+	  },
   },
 
   async created() {
@@ -724,48 +1097,142 @@ export default {
 
   // Methods required to run
   methods: {
-    async fetchPosts() {
-      if (window.ethereum) {
-        window.web3 = new Web3(ethereum);
-        try {
-          // Request account access if needed
-          ethereum.enable();
-        } catch (error) {
-          // User denied account access...
-        }
-      } else if (window.web3) {
-        // Legacy dapp browsers...
-        window.web3 = new Web3(web3.currentProvider);
-      } else {
-        window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ropsten.infura.io/ws"));
-      }
+    async fetchPosts(catId = null, tagFilter = null, address = null) {
+		this.currentCategoryListing = catId;
+		this.currentTagFilter = tagFilter;
+		this.currentAddressFilter = address;
 
-      var contract = new web3.eth.Contract(abi, "0x892A4EDa13Cf846C8C352445817262a7e4f78fF0");
+		if (window.ethereum) {
+			window.web3 = new Web3(ethereum);
+			try {
+			// Request account access if needed
+			ethereum.enable();
+			} catch (error) {
+			// User denied account access...
+			}
+		} else if (window.web3) {
+			// Legacy dapp browsers...
+			window.web3 = new Web3(web3.currentProvider);
+		} else {
+			window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://ropsten.infura.io/ws"));
+		}
 
-      const counter = await contract.methods.getCounter().call({
-        from: this.currentAccount,
-      });
-      const postsFromContract = [];
-      if (counter !== null) {
-        for (let i = counter; i >= 1; i -= 1) {
-			postsFromContract.push(contract.methods.getHash(i).call({
+      	var contract = new web3.eth.Contract(abi, contractAddress);
+
+		var posts;
+		if (this.currentCategoryListing != null)
+		{
+			//GetPost
+			const categoryPostCounter = await contract.methods.getCategoryPostCounter(this.currentCategoryListing).call({
 				from: this.currentAccount,
-			}));
-        }
-      }
-      const posts = await Promise.all(postsFromContract);
+			});
+			const categoryPostsFromContract = [];
+			if (categoryPostCounter !== null && categoryPostCounter > 0) {
+				for (let i = categoryPostCounter - 1; i >= 0; i -= 1) {
+					try
+					{
+						var tempPost = await contract.methods.getPostByCategoryItem(this.currentCategoryListing,i).call({
+							from: this.currentAccount,
+						});
+						tempPost['id'] = i;
+						categoryPostsFromContract.push(tempPost);
+					}
+					catch (ex)
+					{
 
-	  const categoryCounter = await contract.methods.getCategoryCounter().call({
-        from: this.currentAccount,
-      });
-      const catFromContract = [];
-      if (categoryCounter !== null) {
-        for (let i = 0; i < categoryCounter; i += 1) {
-			catFromContract.push(contract.methods.getCategory(i).call({
+					}
+				}
+			}
+			posts = categoryPostsFromContract;
+		}
+		else if (this.currentTagFilter != null)
+		{
+			//GetPost
+			const tagRecordCounter = await contract.methods.getTagRecordCounter(this.currentTagFilter).call({
 				from: this.currentAccount,
-			}));
-        }
-      }
+			});
+			const tagPostsFromContract = [];
+			if (tagRecordCounter !== null && tagRecordCounter > 0) {
+				for (let i = tagRecordCounter - 1; i >= 0; i -= 1) {
+					try
+					{
+						var tempPost = await contract.methods.getPostByTagRecord(this.currentTagFilter,i).call({
+							from: this.currentAccount,
+						});
+						tempPost['id'] = i;
+						tagPostsFromContract.push(tempPost);
+					}
+					catch (ex)
+					{
+
+					}
+				}
+			}
+			posts = tagPostsFromContract;
+		}
+		else if (this.currentAddressFilter != null)
+		{
+			//GetPost
+			const postingRecordCounter = await contract.methods.getPostingRecordCounter(this.currentAddressFilter).call({
+				from: this.currentAccount,
+			});
+			const addressPostsFromContract = [];
+			if (postingRecordCounter !== null && postingRecordCounter > 0) {
+				for (let i = postingRecordCounter - 1; i >= 0; i -= 1) {
+					try
+					{
+						var tempPost = await contract.methods.getPostByAddressItem(this.currentAddressFilter,i).call({
+							from: this.currentAccount,
+						});
+						tempPost['id'] = i;
+						addressPostsFromContract.push(tempPost);
+					}
+					catch (ex)
+					{
+
+					}
+				}
+			}
+			posts = addressPostsFromContract;
+		}
+		else
+		{
+			//GetPost
+			const counter = await contract.methods.getCounter().call({
+				from: this.currentAccount,
+			});
+			const postsFromContract = [];
+			if (counter !== null) {
+				for (let i = counter; i >= 1; i -= 1) {
+					try
+					{
+						var tempPost = await contract.methods.getHash(i).call({
+							from: this.currentAccount,
+						});
+						tempPost['id'] = i;
+						postsFromContract.push(tempPost);
+					}
+					catch (ex)
+					{
+
+					}
+				}
+			}
+			posts = postsFromContract;
+		}
+
+		//GetCategory
+		const categoryCounter = await contract.methods.getCategoryCounter().call({
+			from: this.currentAccount,
+		});
+		const catFromContract = [];
+		if (categoryCounter !== null) {
+			for (let i = 0; i < categoryCounter; i += 1) {
+				catFromContract.push(contract.methods.getCategory(i).call({
+					from: this.currentAccount,
+				}));
+			}
+		}
     	const cat = await Promise.all(catFromContract);
 		var categoryPlaceholder = [
         	{value: null, text:'請選擇'},
@@ -773,10 +1240,9 @@ export default {
 	  	for (let i = 0; i < cat.length; i += 1) {
           categoryPlaceholder.push({
             value: i,
-            text: cat[i],
+            text: cat[i].catName,
           });
         }
-
 		this.categoryList = cat;
 	  	this.categoryOptions = categoryPlaceholder;
       	this.currentPosts = posts;
@@ -826,8 +1292,8 @@ export default {
 
 	  let self = this;
 
-      var contract = new web3.eth.Contract(abi, "0x892A4EDa13Cf846C8C352445817262a7e4f78fF0");
-      contract.methods.postHash(this.form.categorySelect,this.form.caption, this.form.imgIpfsHash, this.form.videoIpfsHash, this.form.ethHash)
+      var contract = new web3.eth.Contract(abi, contractAddress);
+      contract.methods.postHash(this.form.categorySelect,this.form.caption, this.form.message, this.form.imgIpfsHash, this.form.videoIpfsHash, this.form.ethHash, this.form.tags)
       .send({ from: web3.currentProvider.publicConfigStore._state.selectedAddress },
               (error, transactionHash) => {
 				if (error)

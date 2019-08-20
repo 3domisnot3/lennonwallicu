@@ -44,6 +44,7 @@
       <div v-html="txlink"></div>
       <div style="max-width:600px;margin:0 auto;">
         <center>
+          <button class="btnhash m-2" v-clipboard="txHash"></button>
           <button class="btncopy m-2" v-clipboard="$t('__newFileLink',{txHashVal: txHash})"></button>
           <button class="btnqrcode m-2" @click="$modal.show('qr-code');"></button>
         </center>
